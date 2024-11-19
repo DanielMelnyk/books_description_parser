@@ -1,0 +1,11 @@
+WHITESPACE = { " " | "\t" }
+SPACE = { WHITESPACE+ }
+NEWLINE = { "\n" }
+
+book_title = { "Book " ~ book_num ~ ":" ~ SPACE? ~ quoted_text ~ NEWLINE }
+publication_year = { "Publication Year:" ~ SPACE? ~ ASCII_DIGIT+ ~ NEWLINE }
+price = { "Price:" ~ SPACE? ~ number ~ SPACE? ~ "UAH" ~ NEWLINE }
+
+book_num = { ASCII_DIGIT+ }
+number = { ("-"? ~ ASCII_DIGIT+) ~ (("." ~ ASCII_DIGIT+)?) }
+quoted_text = { "\"" ~ (!"\"" ~ ANY)* ~ "\"" }

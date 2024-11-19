@@ -1,0 +1,10 @@
+[package]
+name = "books_description_parser"
+version = "0.1.0"
+edition = "2021"
+description = "A Rust-based parser to extract book details from structured markdown-like text and output them in formats like JSON or Rust structs for further processing."
+
+[dependencies]
+anyhow = "1.0.91"
+pest = "2.7.14"
+pest_derive = "2.7.14"
