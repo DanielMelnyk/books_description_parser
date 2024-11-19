@@ -5,7 +5,19 @@ NEWLINE = { "\n" }
 book_title = { "Book " ~ book_num ~ ":" ~ SPACE? ~ quoted_text ~ NEWLINE }
 publication_year = { "Publication Year:" ~ SPACE? ~ ASCII_DIGIT+ ~ NEWLINE }
 price = { "Price:" ~ SPACE? ~ number ~ SPACE? ~ "UAH" ~ NEWLINE }
+rating = { "Rating:" ~ SPACE? ~ rating_value ~ NEWLINE }
 
-book_num = { ASCII_DIGIT+ }
+book_num = @{ ASCII_DIGIT+ }
 number = { ("-"? ~ ASCII_DIGIT+) ~ (("." ~ ASCII_DIGIT+)?) }
 quoted_text = { "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
+
+rating_value = @{ ("0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10") ~ ("." ~ ASCII_DIGIT+)? }
+
+list_of_authors = { "Authors:" ~ SPACE? ~ "[" ~ SPACE? ~ (author ~ ("," ~ SPACE? ~ author)*)? ~ SPACE? ~ "]" ~ NEWLINE }
+author = @{ (!"," ~ !"[" ~ !"]" ~ ANY)+ }
+
+list_of_genres = { "Genres:" ~ SPACE? ~ "[" ~ SPACE? ~ (genre_item ~ ("," ~ SPACE? ~ genre_item)*)? ~ SPACE? ~ "]" ~ NEWLINE }
+genre_item = { (!"," ~ !"[" ~ !"]" ~ ANY)+ }
+
+book = { book_title ~ list_of_authors ~ list_of_genres ~ publication_year ~ rating ~ price }
+books = { (book ~ NEWLINE*)+ }

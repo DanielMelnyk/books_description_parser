@@ -3,6 +3,7 @@ name = "books_description_parser"
 version = "0.1.0"
 edition = "2021"
 description = "A Rust-based parser to extract book details from structured markdown-like text and output them in formats like JSON or Rust structs for further processing."
+readme = "README.md"
 
 [dependencies]
 anyhow = "1.0.91"
