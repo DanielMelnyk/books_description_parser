@@ -47,3 +47,8 @@ Price: 199.00 UAH
   "price": "199.00 UAH"
 }
 ```
+
+### Links
+
+https://crates.io/crates/books_description_parser
+
