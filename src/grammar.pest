@@ -1,23 +1,64 @@
-WHITESPACE = { " " | "\t" }
-SPACE = { WHITESPACE+ }
-NEWLINE = { "\n" }
+/// Defines whitespace characters including space and tab.
+WHITESPACE = { " " | "\t" } 
 
-book_title = { "Book " ~ book_num ~ ":" ~ SPACE? ~ quoted_text ~ NEWLINE }
-publication_year = { "Publication Year:" ~ SPACE? ~ ASCII_DIGIT+ ~ NEWLINE }
-price = { "Price:" ~ SPACE? ~ number ~ SPACE? ~ "UAH" ~ NEWLINE }
-rating = { "Rating:" ~ SPACE? ~ rating_value ~ NEWLINE }
+/// A sequence of one or more whitespace characters.
+SPACE = { WHITESPACE+ } 
 
-book_num = @{ ASCII_DIGIT+ }
-number = { ("-"? ~ ASCII_DIGIT+) ~ (("." ~ ASCII_DIGIT+)?) }
-quoted_text = { "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
+/// Represents a newline character.
+NEWLINE = { "\n" } 
 
-rating_value = @{ ("0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10") ~ ("." ~ ASCII_DIGIT+)? }
+/// Defines the format for the title of a book, which starts with "Book", followed by a number, 
+/// an optional space, quoted text for the title, and ends with a newline.
+book_title = { "Book " ~ book_num ~ ":" ~ SPACE? ~ quoted_text ~ NEWLINE } 
 
-list_of_authors = { "Authors:" ~ SPACE? ~ "[" ~ SPACE? ~ (author ~ ("," ~ SPACE? ~ author)*)? ~ SPACE? ~ "]" ~ NEWLINE }
-author = @{ (!"," ~ !"[" ~ !"]" ~ ANY)+ }
+/// Defines the format for the publication year of a book, which starts with "Publication Year:",
+/// followed by an optional space, a year, and ends with a newline.
+publication_year = { "Publication Year:" ~ SPACE? ~ year ~ NEWLINE } 
 
-list_of_genres = { "Genres:" ~ SPACE? ~ "[" ~ SPACE? ~ (genre_item ~ ("," ~ SPACE? ~ genre_item)*)? ~ SPACE? ~ "]" ~ NEWLINE }
-genre_item = { (!"," ~ !"[" ~ !"]" ~ ANY)+ }
+/// Specifies the format for a book's price, which starts with "Price:", followed by an optional space,
+/// a number, an optional space, a currency code, and ends with a newline.
+price = { "Price:" ~ SPACE? ~ number ~ SPACE? ~ currency ~ NEWLINE } 
 
-book = { book_title ~ list_of_authors ~ list_of_genres ~ publication_year ~ rating ~ price }
-books = { (book ~ NEWLINE*)+ }
+/// Represents the format for a book's rating, which starts with "Rating:", followed by an optional space,
+/// a rating value, and ends with a newline.
+rating = { "Rating:" ~ SPACE? ~ rating_value ~ NEWLINE } 
+
+/// Matches a sequence of alphabetic characters representing a currency code.
+currency = @{ ASCII_ALPHA+ } 
+
+/// Matches a sequence of digits representing a year.
+year = @{ ASCII_DIGIT+ } 
+
+/// Matches a sequence of digits representing a book number.
+book_num = @{ ASCII_DIGIT+ } 
+
+/// Matches a number, which can optionally include a negative sign and a decimal part.
+number = @{ ("-"? ~ ASCII_DIGIT+) ~ (("." ~ ASCII_DIGIT+)?) } 
+
+/// Matches quoted text, which starts and ends with double quotes and can include any characters
+/// except another double quote.
+quoted_text = { "\"" ~ (!"\"" ~ ANY)* ~ "\"" } 
+
+/// Matches a numeric rating value from 0 to 10, optionally with a decimal part.
+rating_value = @{ ("0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9" | "10") ~ ("." ~ ASCII_DIGIT+)? } 
+
+/// Defines a list of authors, which starts with "Authors:", followed by an optional space, 
+/// square brackets containing one or more authors separated by commas, and ends with a newline.
+list_of_authors = { "Authors:" ~ SPACE? ~ "[" ~ SPACE? ~ (author ~ ("," ~ SPACE? ~ author)*)? ~ SPACE? ~ "]" ~ NEWLINE } 
+
+/// Matches a single author's name, which can include any characters except a comma or square brackets.
+author = @{ (!"," ~ !"[" ~ !"]" ~ ANY)+ } 
+
+/// Defines a list of genres, which starts with "Genres:", followed by an optional space,
+/// square brackets containing one or more genres separated by commas, and ends with a newline.
+list_of_genres = { "Genres:" ~ SPACE? ~ "[" ~ SPACE? ~ (genre_item ~ ("," ~ SPACE? ~ genre_item)*)? ~ SPACE? ~ "]" ~ NEWLINE } 
+
+/// Matches a single genre item, which can include any characters except a comma or square brackets.
+genre_item = { (!"," ~ !"[" ~ !"]" ~ ANY)+ } 
+
+/// Defines the structure of a single book entry, which includes a title, a list of authors,
+/// a list of genres, a publication year, a rating, and a price.
+book = { book_title ~ list_of_authors ~ list_of_genres ~ publication_year ~ rating ~ price } 
+
+/// Represents a collection of books, each separated by one or more newlines, with a final book entry at the end.
+books = { (book ~ NEWLINE+)* ~ book } 

@@ -5,32 +5,19 @@
 
 The parser processes these descriptions and converts them into a structured data format like JSON or Rust structs, which can be used for further analysis, storage, or integration into book-related applications.
 
-## Parsing Process
+## Technical description
 The parser reads a markdown-like format with structured information for each book. Each book entry contains the following fields:
 
-1. **Book Title**: The title of the book.
-2. **Authors**: A list of authors of the book.
-3. **Genres**: A list of genres associated with the book.
-4. **Publication Year**: The year the book was published.
-5. **Rating**: The overall rating of the book.
-6. **Price**: The price of the book.
+1. **Book Title**: The title of the book, enclosed in quotation marks.
+2. **Authors**: A list of authors separated by commas, enclosed in square brackets.
+3. **Genres**: A list of genres separated by commas, enclosed in square brackets.
+4. **Publication Year**: The year the book was published as a positive integer.
+5. **Rating**: The overall rating of the book as a floating-point value (0–10).
+6. **Price**: The price of the book as a floating-point value, followed by the currency
 
 ### Grammar
 The parser leverages the Pest library to handle the input format. The grammar rules defined in `grammar.pest` process various fields, including strings, numbers, and lists (e.g., authors and genres), ensuring accurate extraction.
 
-```
-WHITESPACE = { " " | "\t" }
-SPACE = { WHITESPACE+ }
-NEWLINE = { "\n" }
-
-book_title = { "Book " ~ book_num ~ ":" ~ SPACE? ~ quoted_text ~ NEWLINE }
-publication_year = { "Publication Year:" ~ SPACE? ~ ASCII_DIGIT+ ~ NEWLINE }
-price = { "Price:" ~ SPACE? ~ number ~ SPACE? ~ "UAH" ~ NEWLINE }
-
-book_num = { ASCII_DIGIT+ }
-number = { ("-"? ~ ASCII_DIGIT+) ~ (("." ~ ASCII_DIGIT+)?) }
-quoted_text = { "\"" ~ (!"\"" ~ ANY)* ~ "\"" }
-```
 
 ### Example of Input
 ```markdown
@@ -57,6 +44,6 @@ Price: 199.00 UAH
   ],
   "publication_year": 2016,
   "rating": 9.5,
-  "price": 199.00
+  "price": "199.00 UAH"
 }
 ```

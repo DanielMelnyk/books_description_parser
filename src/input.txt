@@ -1,0 +1,6 @@
+Book 1: "First Book"
+Authors: [Author One, Author Two]
+Genres: [Fiction, Drama]
+Publication Year: 2020
+Rating: 8.0
+Price: 120.00 UAH
